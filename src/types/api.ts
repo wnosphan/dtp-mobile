@@ -1,3 +1,18 @@
+export interface User {
+  id: string;
+  name: string;
+  photo: string;
+}
+
+export interface Review {
+  id: string;
+  review: string;
+  rating: number;
+  user: User;
+  tour: string;
+  createdAt: string;
+}
+
 export interface Tour {
   id: string;
   title: string;
@@ -17,6 +32,7 @@ export interface Tour {
   updatedAt: string;
   onlyFromCost: number;
   avgStar: number;
+  reviews: Review[];
 }
 
 // OData response interface

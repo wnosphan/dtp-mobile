@@ -133,7 +133,7 @@ const tourApi = {
     console.log('[tourApi.getById] Called with id:', id);
     try {
       const response = await axiosInstance.get<Tour>(`/api/tour/${id}`);
-      return response.data;
+    return response.data;
     } catch (error) {
       console.error('[tourApi.getById] Error:', error);
       if (axios.isAxiosError(error) && error.response?.status === 409) {
@@ -148,7 +148,7 @@ const tourApi = {
     console.log('[tourApi.getScheduleTickets] Called with id:', id);
     try {
       const response = await axiosInstance.get<DailyTicketSchedule[]>(`/api/tour/scheduleticket/${id}`);
-      return response.data;
+    return response.data;
     } catch (error) {
       console.error('[tourApi.getScheduleTickets] Error:', error);
       if (axios.isAxiosError(error) && error.response?.status === 409) {
@@ -163,7 +163,7 @@ const tourApi = {
     console.log('[tourApi.getRecommended] Called');
     try {
       const response = await axiosInstance.get<Tour[]>('/api/tour/recommend');
-      return response.data;
+    return response.data;
     } catch (error) {
       console.error('[tourApi.getRecommended] Error:', error);
       if (axios.isAxiosError(error) && error.response?.status === 409) {
