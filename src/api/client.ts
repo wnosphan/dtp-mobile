@@ -1,25 +1,23 @@
-import axios, { AxiosHeaders } from 'axios';
+import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://api.yourdomain.com/v1';
-
-export const api = axios.create({
-  baseURL: BASE_URL,
-  timeout: 10000,
+// Create axios instance with custom config
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor for API calls
+// Add a request interceptor
 api.interceptors.request.use(
-  (config) => {
-    const token = ''; // TODO: Get from secure storage
-    if (token) {
-      if (!config.headers) {
-        config.headers = new AxiosHeaders();
-      }
-      config.headers.set('Authorization', `Bearer ${token}`);
-    }
+  async (config) => {
+    // Get token from secure storage
+    // const token = await SecureStore.getItemAsync('token');
+    // if (token) {
+    //   config.headers.Authorization = `Bearer ${token}`;
+    // }
     return config;
   },
   (error) => {
@@ -27,34 +25,33 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor for API calls
+// Add a response interceptor
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (!originalRequest) {
-      return Promise.reject(error);
-    }
 
-    // Handle 401 - Unauthorized
+    // If error is 401 and we haven't retried yet
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+
       try {
-        const refreshToken = ''; // TODO: Get from secure storage
-        const response = await api.post<{ token: string }>('/auth/refresh-token', { refreshToken });
-        const { token } = response.data;
-        // TODO: Save new token to secure storage
-        if (!originalRequest.headers) {
-          originalRequest.headers = new AxiosHeaders();
-        }
-        originalRequest.headers.set('Authorization', `Bearer ${token}`);
+        // Attempt to refresh token
+        // const newToken = await refreshToken();
+        // Update token in secure storage
+        // await SecureStore.setItemAsync('token', newToken);
+        // Update authorization header
+        // originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        // Retry the original request
         return api(originalRequest);
-      } catch (error) {
-        // TODO: Handle refresh token failure (e.g., logout user)
-        return Promise.reject(error);
+      } catch (refreshError) {
+        // Handle refresh token error (e.g., redirect to login)
+        return Promise.reject(refreshError);
       }
     }
 
     return Promise.reject(error);
   }
 ); 
+
+export default api; 

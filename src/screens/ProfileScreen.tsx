@@ -1,19 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { RootStackScreenProps } from '../types/navigation';
+import { View, Text } from 'react-native';
 
-export default function ProfileScreen({ navigation }: RootStackScreenProps<'Profile'>) {
+export const ProfileScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text>Profile Screen</Text>
+    <View className="flex-1 justify-center items-center">
+      <Text className="text-lg">Profile Screen</Text>
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-}); 
+}; 
